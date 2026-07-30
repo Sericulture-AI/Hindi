@@ -294,9 +294,11 @@
     box-shadow:0 0 0 4px rgba(95,0,11,0.12);
   }
   .row2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .row2 > *{ min-width:0; }
   @media (max-width:560px){ .row2{ grid-template-columns:1fr; } }
 
   fieldset{
+    min-width:0;
     border:1px solid var(--line);
     padding:16px 18px;
     border-radius:12px;
@@ -313,7 +315,7 @@
     display:flex; align-items:center; gap:7px;
     color:var(--ink); cursor:pointer;
   }
-  input[type=radio], input[type=checkbox]{ accent-color:var(--maroon); width:16px; height:16px; }
+  input[type=radio], input[type=checkbox]{ accent-color:var(--maroon); width:16px; height:16px; flex-shrink:0; }
 
   .abstract-field{ display:none; }
 
@@ -570,7 +572,7 @@
 <script>
   // ===== कॉन्फ़िगरेशन (CONFIGURATION) =====
   // यहाँ Apps Script "Deploy > Web App" से मिला URL पेस्ट करें
-  const SUBMIT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbyiSaryGWz2EoLeS2MgiiQAg3p4EEl7II-LpmDhw5R3q8acC1haFDOe-pgKfBV2RxCG/exec";
 
   function toggleAbstract(show){
     document.querySelectorAll('.abstract-field').forEach(el => {
