@@ -641,12 +641,107 @@
 </footer>
 
 <script>
-  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbyGqYKqtcl0jkgAGFNGgwn8Hp1atDUhZ3nHIdNR6hLZrZmotlwydm4sFQ8JwAImQrReow/exec";
+  const SUBMIT_URL = "https://script.google.com/macros/s/AKfycby0nGTE-0myV-mwnPRDgrVKjigN_9ZKwbOzR5doZw055zil3FFijReOxm9U_gqHMUXgUg/exec";
 
   const abstractText  = document.getElementById('abstractText');
   const abstractTitle = document.getElementById('abstractTitle');
   const wordCountHint = document.getElementById('wordCountHint');
   const MAX_ABSTRACT_WORDS = 300;
+
+  /* ---------- auto Hindi transliteration (phonetic Hinglish -> Devanagari) ---------- */
+  /* As soon as a word is finished (space / punctuation / leaving the field), it is
+     converted from Roman-typed Hindi (e.g. "namaste") into Devanagari (नमस्ते).
+     ALL-CAPS words (e.g. CMERTI, JRF) are left untouched, since those are usually
+     institutional acronyms, not words meant to be typed phonetically. */
+
+  const HI_VOWEL_INDEP = { aa:'आ', ai:'ऐ', au:'औ', ee:'ई', ii:'ई', oo:'ऊ', uu:'ऊ', a:'अ', e:'ए', i:'इ', o:'ओ', u:'उ' };
+  const HI_VOWEL_MATRA = { aa:'ा', ai:'ै', au:'ौ', ee:'ी', ii:'ी', oo:'ू', uu:'ू', a:'', e:'े', i:'ि', o:'ो', u:'ु' };
+  const HI_CONS = {
+    ksh:'क्ष', chh:'छ', gy:'ज्ञ', tr:'त्र',
+    kh:'ख', gh:'घ', ch:'च', jh:'झ', th:'थ', dh:'ध', ph:'फ', bh:'भ', sh:'श',
+    b:'ब', c:'क', d:'द', f:'फ़', g:'ग', h:'ह', j:'ज', k:'क', l:'ल', m:'म',
+    n:'न', p:'प', q:'क', r:'र', s:'स', t:'त', v:'व', w:'व', x:'क्स', y:'य', z:'ज़'
+  };
+  const HI_ALL_KEYS = Object.keys(HI_CONS).concat(Object.keys(HI_VOWEL_INDEP)).sort(function(a,b){ return b.length - a.length; });
+
+  function transliterateHindiWord(word){
+    if (/^[A-Z]{2,}$/.test(word)) return word; // leave acronyms like CMERTI, JRF alone
+    var w = word.toLowerCase();
+    var tokens = [];
+    var i = 0;
+    while (i < w.length){
+      var matched = null;
+      for (var k = 0; k < HI_ALL_KEYS.length; k++){
+        var key = HI_ALL_KEYS[k];
+        if (w.substr(i, key.length) === key){ matched = key; break; }
+      }
+      if (!matched) matched = w[i];
+      tokens.push(matched);
+      i += matched.length;
+    }
+    var isVowel = function(t){ return HI_VOWEL_INDEP.hasOwnProperty(t); };
+    var out = '';
+    var idx = 0;
+    while (idx < tokens.length){
+      var tok = tokens[idx];
+      if (isVowel(tok)){
+        out += HI_VOWEL_INDEP[tok] || tok;
+        idx += 1;
+      } else if (HI_CONS.hasOwnProperty(tok)){
+        var base = HI_CONS[tok];
+        var next = tokens[idx + 1];
+        if (next && isVowel(next)){
+          out += (next === 'a') ? base : (base + HI_VOWEL_MATRA[next]);
+          idx += 2;
+        } else {
+          out += base;
+          if (next && !isVowel(next)) out += '्';
+          idx += 1;
+        }
+      } else {
+        out += tok; // digits/punctuation pass through untouched
+        idx += 1;
+      }
+    }
+    return out;
+  }
+
+  const TRANSLIT_BOUNDARY = /[\s,.;:!?()"'\-]/;
+
+  function attachTransliteration(el){
+    if (!el) return;
+    el.addEventListener('input', function(){
+      var pos = el.selectionStart;
+      if (pos === null || pos === undefined) return;
+      var value = el.value;
+      var before = value.slice(0, pos);
+      var afterCursor = value.slice(pos);
+      var lastChar = before.slice(-1);
+      if (!TRANSLIT_BOUNDARY.test(lastChar)) return; // word not finished yet
+      var stem = before.slice(0, -1);
+      var m = stem.match(/[A-Za-z]+$/);
+      if (!m) return;
+      var word = m[0];
+      var converted = transliterateHindiWord(word);
+      if (converted === word) return;
+      var newBefore = stem.slice(0, stem.length - word.length) + converted + lastChar;
+      el.value = newBefore + afterCursor;
+      var newPos = newBefore.length;
+      el.setSelectionRange(newPos, newPos);
+    });
+    el.addEventListener('blur', function(){
+      var value = el.value;
+      var m = value.match(/[A-Za-z]+$/);
+      if (!m) return;
+      var word = m[0];
+      var converted = transliterateHindiWord(word);
+      if (converted === word) return;
+      el.value = value.slice(0, value.length - word.length) + converted;
+    });
+  }
+
+  ['fullName','designation','org','address','abstractTitle','abstractText','trainDetails','flightDetails','comingFrom','remarks']
+    .forEach(function(id){ attachTransliteration(document.getElementById(id)); });
 
   /* ---------- author list (repeatable rows) ---------- */
 
@@ -688,6 +783,7 @@
     inp.placeholder = 'लेखक का पूरा नाम';
     inp.autocomplete = 'off';
     if (value) inp.value = value;
+    attachTransliteration(inp);
     inp.addEventListener('input', syncAuthors);
     inp.addEventListener('keydown', function(ev){
       if (ev.key === 'Enter'){ ev.preventDefault(); addAuthorRow('', true); }
