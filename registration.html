@@ -124,10 +124,7 @@
     line-height:1.6;
     padding-top:0.15em;
     margin:0 0 10px;
-    background:linear-gradient(100deg, var(--maroon-deep) 15%, var(--maroon) 55%, var(--gold-deep) 95%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
+    color:var(--maroon-deep);
   }
   .hero h2.sub{
     font-family:var(--font-display);
@@ -207,10 +204,7 @@
     font-family:var(--font-display);
     font-weight:700;
     font-size:20px;
-    background:linear-gradient(100deg, var(--maroon-deep), var(--gold-deep));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
+    color:var(--maroon-deep);
   }
   @media (max-width:480px){ .deadline-strip{grid-template-columns:1fr;} }
 
@@ -318,6 +312,12 @@
   input[type=radio], input[type=checkbox]{ accent-color:var(--maroon); width:16px; height:16px; flex-shrink:0; }
 
   .abstract-field{ display:none; }
+  .word-count{
+    text-align:right;
+    font-weight:600;
+    color:var(--ink-faint);
+  }
+  .word-count.limit{ color:var(--error); }
   .travel-field{ display:block; }
 
   .submit-btn{
@@ -490,13 +490,19 @@
             <label><input type="radio" name="Abstract" value="हाँ" onclick="toggleAbstract(true)"> हाँ</label>
             <label><input type="radio" name="Abstract" value="नहीं" onclick="toggleAbstract(false)" checked> नहीं</label>
           </div>
-          <p class="hint">शोध सारांश (लगभग 250–300 शब्द, मंगल या यूनिकोड फॉण्ट में, वर्ड फाइल के रूप में) <strong>20 अगस्त 2026</strong> तक <strong>hindicellcmerti@gmail.com</strong> पर ईमेल करें।</p>
+          <p class="hint">शोध सारांश (लगभग 250–300 शब्द, मंगल या यूनिकोड फॉण्ट में, फॉन्ट साइज़ 10, वर्ड फाइल के रूप में) <strong>20 अगस्त 2026</strong> तक <strong>hindicellcmerti@gmail.com</strong> पर ईमेल करें, अथवा नीचे दिए गए बॉक्स में सीधे टाइप/पेस्ट करें।</p>
         </fieldset>
       </div>
 
       <div class="field abstract-field" id="abstractTitleField">
         <label for="abstractTitle">शोध सारांश का शीर्षक</label>
         <input type="text" id="abstractTitle" name="Abstract Title">
+      </div>
+
+      <div class="field abstract-field" id="abstractTextField">
+        <label for="abstractText">शोध सारांश (यहाँ टाइप या पेस्ट करें)</label>
+        <textarea id="abstractText" name="Abstract Text" placeholder="अपना शोध सारांश यहाँ टाइप या पेस्ट करें (अधिकतम 300 शब्द)" rows="8"></textarea>
+        <p class="hint word-count" id="wordCountHint">0 / 300 शब्द</p>
       </div>
 
       <div class="field" id="themeField">
@@ -581,6 +587,52 @@
     });
   }
 
+  // ---- Abstract textarea: normalize pasted text and enforce 300-word limit ----
+  const abstractText = document.getElementById('abstractText');
+  const wordCountHint = document.getElementById('wordCountHint');
+  const MAX_ABSTRACT_WORDS = 300;
+
+  function countWords(str){
+    const trimmed = str.trim();
+    return trimmed.length ? trimmed.split(/\s+/).length : 0;
+  }
+
+  function normalizeAbstractText(str){
+    return str
+      .normalize('NFC')                 // unify Unicode composition so all sources render identically
+      .replace(/\r\n/g, '\n')
+      .replace(/[ \t]+/g, ' ')          // collapse repeated spaces/tabs from Word paste
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function enforceAbstractLimit(){
+    let words = abstractText.value.trim().length ? abstractText.value.trim().split(/\s+/) : [];
+    if (words.length > MAX_ABSTRACT_WORDS) {
+      words = words.slice(0, MAX_ABSTRACT_WORDS);
+      abstractText.value = words.join(' ');
+    }
+    wordCountHint.textContent = words.length + ' / ' + MAX_ABSTRACT_WORDS + ' शब्द';
+    wordCountHint.classList.toggle('limit', words.length >= MAX_ABSTRACT_WORDS);
+  }
+
+  if (abstractText) {
+    abstractText.addEventListener('paste', function(e){
+      e.preventDefault();
+      const clip = (e.clipboardData || window.clipboardData).getData('text/plain');
+      const clean = normalizeAbstractText(clip);
+      const start = this.selectionStart, end = this.selectionEnd;
+      const current = this.value;
+      this.value = current.slice(0, start) + clean + current.slice(end);
+      enforceAbstractLimit();
+    });
+    abstractText.addEventListener('input', enforceAbstractLimit);
+    abstractText.addEventListener('blur', function(){
+      abstractText.value = normalizeAbstractText(abstractText.value);
+      enforceAbstractLimit();
+    });
+  }
+
   function toggleTravel(show){
     document.querySelectorAll('.travel-field').forEach(el => {
       el.style.display = show ? '' : 'none';
@@ -638,6 +690,7 @@
     form.reset();
     toggleAbstract(false);
     toggleTravel(true);
+    if (wordCountHint) { wordCountHint.textContent = '0 / 300 शब्द'; wordCountHint.classList.remove('limit'); }
     btn.disabled = false;
     btn.textContent = 'पंजीकरण जमा करें';
   });
