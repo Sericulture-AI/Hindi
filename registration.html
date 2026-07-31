@@ -311,14 +311,15 @@
   }
   input[type=radio], input[type=checkbox]{ accent-color:var(--maroon); width:16px; height:16px; flex-shrink:0; }
 
-  .abstract-field{ display:none; }
+  /* single visibility switch — never overrides the element's own display type */
+  .is-hidden{ display:none !important; }
+
   .word-count{
     text-align:right;
     font-weight:600;
     color:var(--ink-faint);
   }
   .word-count.limit{ color:var(--error); }
-  .travel-field{ display:block; }
 
   .submit-btn{
     width:100%;
@@ -494,12 +495,12 @@
         </fieldset>
       </div>
 
-      <div class="field abstract-field" id="abstractTitleField">
+      <div class="field abstract-field is-hidden" id="abstractTitleField">
         <label for="abstractTitle">शोध सारांश का शीर्षक</label>
         <input type="text" id="abstractTitle" name="Abstract Title">
       </div>
 
-      <div class="field abstract-field" id="abstractTextField">
+      <div class="field abstract-field is-hidden" id="abstractTextField">
         <label for="abstractText">शोध सारांश (यहाँ टाइप या पेस्ट करें)</label>
         <textarea id="abstractText" name="Abstract Text" placeholder="अपना शोध सारांश यहाँ टाइप या पेस्ट करें (अधिकतम 300 शब्द)" rows="8"></textarea>
         <p class="hint word-count" id="wordCountHint">0 / 300 शब्द</p>
@@ -581,27 +582,37 @@
 <script>
   const SUBMIT_URL = "https://script.google.com/macros/s/AKfycby0nGTE-0myV-mwnPRDgrVKjigN_9ZKwbOzR5doZw055zil3FFijReOxm9U_gqHMUXgUg/exec";
 
-  function toggleAbstract(show){
-    document.querySelectorAll('.abstract-field').forEach(el => {
-      el.style.display = show ? 'block' : 'none';
-    });
-  }
-
-  // ---- Abstract textarea: normalize pasted text and enforce 300-word limit ----
-  const abstractText = document.getElementById('abstractText');
+  const abstractText  = document.getElementById('abstractText');
+  const abstractTitle = document.getElementById('abstractTitle');
   const wordCountHint = document.getElementById('wordCountHint');
   const MAX_ABSTRACT_WORDS = 300;
 
-  function countWords(str){
-    const trimmed = str.trim();
-    return trimmed.length ? trimmed.split(/\s+/).length : 0;
+  /* ---------- show / hide (class based, keeps grid layout intact) ---------- */
+
+  function toggleAbstract(show){
+    document.querySelectorAll('.abstract-field').forEach(function(el){
+      el.classList.toggle('is-hidden', !show);
+    });
+    if (!show){
+      abstractTitle.value = '';
+      abstractText.value  = '';
+      enforceAbstractLimit();
+    }
   }
+
+  function toggleTravel(show){
+    document.querySelectorAll('.travel-field').forEach(function(el){
+      el.classList.toggle('is-hidden', !show);
+    });
+  }
+
+  /* ---------- abstract textarea ---------- */
 
   function normalizeAbstractText(str){
     return str
-      .normalize('NFC')                 // unify Unicode composition so all sources render identically
+      .normalize('NFC')
       .replace(/\r\n/g, '\n')
-      .replace(/[ \t]+/g, ' ')          // collapse repeated spaces/tabs from Word paste
+      .replace(/[ \t]+/g, ' ')
       .replace(/\n{3,}/g, '\n\n')
       .trim();
   }
@@ -619,7 +630,7 @@
   if (abstractText) {
     abstractText.addEventListener('paste', function(e){
       e.preventDefault();
-      const clip = (e.clipboardData || window.clipboardData).getData('text/plain');
+      const clip  = (e.clipboardData || window.clipboardData).getData('text/plain');
       const clean = normalizeAbstractText(clip);
       const start = this.selectionStart, end = this.selectionEnd;
       const current = this.value;
@@ -633,15 +644,11 @@
     });
   }
 
-  function toggleTravel(show){
-    document.querySelectorAll('.travel-field').forEach(el => {
-      el.style.display = show ? '' : 'none';
-    });
-  }
+  /* ---------- submission ---------- */
 
-  const form = document.getElementById('regForm');
-  const btn = document.getElementById('submitBtn');
-  const statusMsg = document.getElementById('statusMsg');
+  const form        = document.getElementById('regForm');
+  const btn         = document.getElementById('submitBtn');
+  const statusMsg   = document.getElementById('statusMsg');
   const hiddenFrame = document.getElementById('hidden_iframe');
   let awaitingResponse = false;
 
@@ -657,6 +664,8 @@
     form.action = SUBMIT_URL;
     form.target = 'hidden_iframe';
     form.method = 'POST';
+    form.enctype = 'application/x-www-form-urlencoded';
+    form.acceptCharset = 'UTF-8';
   }
 
   form.addEventListener('submit', function(e){
@@ -677,6 +686,20 @@
       return;
     }
 
+    // normalize before the browser serialises the form
+    abstractText.value = normalizeAbstractText(abstractText.value);
+
+    const wantsAbstract = document.querySelector('input[name="Abstract"]:checked');
+    if (wantsAbstract && wantsAbstract.value === 'हाँ') {
+      if (!abstractTitle.value.trim() && !abstractText.value.trim()) {
+        e.preventDefault();
+        statusMsg.className = 'status-msg err';
+        statusMsg.textContent = 'कृपया शोध सारांश का शीर्षक अथवा सारांश टाइप करें, अन्यथा "नहीं" चुनें।';
+        abstractText.focus();
+        return;
+      }
+    }
+
     awaitingResponse = true;
     btn.disabled = true;
     btn.textContent = 'जमा किया जा रहा है...';
@@ -690,10 +713,11 @@
     form.reset();
     toggleAbstract(false);
     toggleTravel(true);
-    if (wordCountHint) { wordCountHint.textContent = '0 / 300 शब्द'; wordCountHint.classList.remove('limit'); }
     btn.disabled = false;
     btn.textContent = 'पंजीकरण जमा करें';
   });
+
+  /* ---------- tilt ---------- */
 
   const tiltWrap = document.querySelector('.tilt-wrap');
   const card = document.querySelector('.card');
