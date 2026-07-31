@@ -314,6 +314,58 @@
   /* single visibility switch — never overrides the element's own display type */
   .is-hidden{ display:none !important; }
 
+  .author-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .author-row .idx{
+    flex:0 0 26px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-faint);
+    text-align:right;
+  }
+  .author-row input{ flex:1 1 auto; min-width:0; }
+  .row-del{
+    flex:0 0 auto;
+    width:36px; height:36px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.75);
+    color:var(--maroon);
+    border-radius:9px;
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+    font-family:var(--font-body);
+  }
+  .row-del:hover{ background:rgba(124,17,23,0.08); }
+  .add-btn{
+    margin-top:2px;
+    padding:9px 16px;
+    border:1px dashed var(--maroon-light);
+    background:transparent;
+    color:var(--maroon);
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    font-family:var(--font-body);
+    cursor:pointer;
+  }
+  .add-btn:hover{ background:rgba(95,0,11,0.06); }
+  .author-preview{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--ink-soft);
+    background:rgba(255,255,255,0.6);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:9px 12px;
+    min-height:38px;
+    word-break:break-word;
+  }
+
   .word-count{
     text-align:right;
     font-weight:600;
@@ -500,6 +552,15 @@
         <input type="text" id="abstractTitle" name="Abstract Title">
       </div>
 
+      <div class="field abstract-field is-hidden" id="authorsField">
+        <label>लेखक / सह-लेखक के नाम</label>
+        <div id="authorList"></div>
+        <button type="button" class="add-btn" id="addAuthorBtn">+ लेखक जोड़ें</button>
+        <div class="author-preview" id="authorPreview">—</div>
+        <p class="hint">प्रस्तुतकर्ता का नाम सबसे पहले लिखें। नाम अल्पविराम से जुड़ेंगे तथा अंतिम नाम से पूर्व “, और” लगेगा।</p>
+        <input type="hidden" id="authorsJoined" name="Authors">
+      </div>
+
       <div class="field abstract-field is-hidden" id="abstractTextField">
         <label for="abstractText">शोध सारांश (यहाँ टाइप या पेस्ट करें)</label>
         <textarea id="abstractText" name="Abstract Text" placeholder="अपना शोध सारांश यहाँ टाइप या पेस्ट करें (अधिकतम 300 शब्द)" rows="8"></textarea>
@@ -587,6 +648,78 @@
   const wordCountHint = document.getElementById('wordCountHint');
   const MAX_ABSTRACT_WORDS = 300;
 
+  /* ---------- author list (repeatable rows) ---------- */
+
+  const authorList    = document.getElementById('authorList');
+  const authorsJoined = document.getElementById('authorsJoined');
+  const authorPreview = document.getElementById('authorPreview');
+  const addAuthorBtn  = document.getElementById('addAuthorBtn');
+
+  function joinAuthors(names){
+    if (names.length === 0) return '';
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return names[0] + ' और ' + names[1];
+    return names.slice(0, -1).join(', ') + ', और ' + names[names.length - 1];
+  }
+
+  function syncAuthors(){
+    const names = Array.prototype.map.call(
+      authorList.querySelectorAll('input'),
+      function(i){ return i.value.replace(/\s+/g, ' ').trim(); }
+    ).filter(Boolean);
+
+    authorsJoined.value = joinAuthors(names);
+    authorPreview.textContent = authorsJoined.value || '—';
+
+    Array.prototype.forEach.call(authorList.querySelectorAll('.idx'), function(el, n){
+      el.textContent = (n + 1) + '.';
+    });
+  }
+
+  function addAuthorRow(value, focus){
+    const row = document.createElement('div');
+    row.className = 'author-row';
+
+    const idx = document.createElement('span');
+    idx.className = 'idx';
+
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = 'लेखक का पूरा नाम';
+    inp.autocomplete = 'off';
+    if (value) inp.value = value;
+    inp.addEventListener('input', syncAuthors);
+    inp.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter'){ ev.preventDefault(); addAuthorRow('', true); }
+    });
+
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'row-del';
+    del.textContent = '\u00D7';
+    del.title = 'हटाएँ';
+    del.addEventListener('click', function(){
+      row.remove();
+      if (!authorList.children.length) addAuthorRow();
+      syncAuthors();
+    });
+
+    row.appendChild(idx);
+    row.appendChild(inp);
+    row.appendChild(del);
+    authorList.appendChild(row);
+    syncAuthors();
+    if (focus) inp.focus();
+  }
+
+  function resetAuthors(){
+    authorList.innerHTML = '';
+    addAuthorRow();
+  }
+
+  addAuthorBtn.addEventListener('click', function(){ addAuthorRow('', true); });
+  resetAuthors();
+
   /* ---------- show / hide (class based, keeps grid layout intact) ---------- */
 
   function toggleAbstract(show){
@@ -596,6 +729,7 @@
     if (!show){
       abstractTitle.value = '';
       abstractText.value  = '';
+      resetAuthors();
       enforceAbstractLimit();
     }
   }
@@ -688,6 +822,7 @@
 
     // normalize before the browser serialises the form
     abstractText.value = normalizeAbstractText(abstractText.value);
+    syncAuthors();
 
     const wantsAbstract = document.querySelector('input[name="Abstract"]:checked');
     if (wantsAbstract && wantsAbstract.value === 'हाँ') {
@@ -696,6 +831,14 @@
         statusMsg.className = 'status-msg err';
         statusMsg.textContent = 'कृपया शोध सारांश का शीर्षक अथवा सारांश टाइप करें, अन्यथा "नहीं" चुनें।';
         abstractText.focus();
+        return;
+      }
+      if (!authorsJoined.value.trim()) {
+        e.preventDefault();
+        statusMsg.className = 'status-msg err';
+        statusMsg.textContent = 'कृपया कम से कम एक लेखक का नाम दर्ज करें।';
+        const firstAuthor = authorList.querySelector('input');
+        if (firstAuthor) firstAuthor.focus();
         return;
       }
     }
