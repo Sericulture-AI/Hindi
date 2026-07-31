@@ -786,6 +786,15 @@
   const hiddenFrame = document.getElementById('hidden_iframe');
   let awaitingResponse = false;
 
+  // Stop Enter-key in any single-line field from submitting the form early
+  // (e.g. pressing Enter after "Abstract Title" would otherwise send the
+  // form before "Abstract Text" / other later fields are filled in).
+  form.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault();
+    }
+  });
+
   const REGISTRATION_CUTOFF = new Date('2026-11-03T23:59:59+05:30');
   if (new Date() > REGISTRATION_CUTOFF) {
     btn.disabled = true;
