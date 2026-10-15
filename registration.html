@@ -437,21 +437,16 @@
   <h1>पंजीकरण फॉर्म</h1>
   <h2 class="sub">राष्ट्रीय राजभाषा रेशम तकनीकी सेमिनार</h2>
   <p class="tagline">रेशम उत्पादन तंत्र के रूपांतरण में महिलाओं एवं युवाओं की भूमिका</p>
-  <p class="org">आयोजक : केंद्रीय मूगा एरी अनुसंधान एवं प्रशिक्षण संस्थान (सीएमईआरटीआई), केंद्रीय रेशम बोर्ड, वस्त्र मंत्रालय, भारत सरकार, लाहदोईगढ़, जोरहाट, असम – 785700</p>
+  <p class="org">आयोजक : कें. रे. बो. - केंद्रीय मूगा एरी अनुसंधान एवं प्रशिक्षण संस्थान (कें. रे. बो. - कें. मू. ए. अ. ए. प्र. सं. ), केंद्रीय रेशम बोर्ड, वस्त्र मंत्रालय, भारत सरकार, लाहदोईगढ़, जोरहाट, असम – 785700</p>
 
   <div class="hero-meta">
     <div class="meta-chip">📅 सेमिनार तिथि · <strong>03 नवम्बर, 2026</strong></div>
-    <div class="meta-chip">📝 शोध सारांश अंतिम तिथि · <strong>30 अगस्त 2026</strong></div>
-    <div class="meta-chip">📍 <strong>राष्ट्रीय डिज़ाइन संस्थान, जोरहाट, असम</strong></div>
+    <div class="meta-chip">📍 <strong>कें. रे. बो. - कें. मू. ए. अ. ए. प्र. सं., जोरहाट, असम</strong></div>
   </div>
 </section>
 
 <div class="wrap">
   <div class="deadline-strip">
-    <div class="deadline-cell">
-      <div class="label">शोध सारांश प्रस्तुतीकरण की अंतिम तिथि</div>
-      <div class="date">30 अगस्त 2026</div>
-    </div>
     <div class="deadline-cell">
       <div class="label">सेमिनार की तिथि</div>
       <div class="date">03 नवम्बर 2026</div>
@@ -495,11 +490,6 @@
         <input type="text" id="org" name="Organization" required>
       </div>
 
-      <div class="field">
-        <label for="address">पत्राचार का पता <span class="req">*</span></label>
-        <textarea id="address" name="Address" required></textarea>
-      </div>
-
       <div class="row2">
         <div class="field">
           <label for="phone">मोबाइल नं. (व्हाट्सएप) <span class="req">*</span></label>
@@ -510,73 +500,31 @@
           <input type="email" id="email" name="Email" required>
         </div>
       </div>
+      
+      <div class="subhead first">क्या प्रतिभागी ने सक्षम प्राधिकारी से अनुमति प्राप्त कर ली है?</div>
 
       <div class="field">
         <fieldset>
-          <legend>श्रेणी <span class="req">*</span></legend>
+          <legend> प्रस्तुतीकरण का प्रकार <span class="req">*</span></legend>
           <div class="radio-row">
-            <label><input type="radio" name="Category" value="वैज्ञानिक / शोधकर्ता" required> वैज्ञानिक / शोधकर्ता</label>
-            <label><input type="radio" name="Category" value="विद्यार्थी / शोध छात्र"> विद्यार्थी / शोध छात्र</label>
-            <label><input type="radio" name="Category" value="उद्योग / उद्यमी"> उद्योग / उद्यमी</label>
-            <label><input type="radio" name="Category" value="कृषक प्रतिनिधि"> कृषक प्रतिनिधि</label>
-            <label><input type="radio" name="Category" value="अन्य"> अन्य</label>
+            <label><input type="radio" name="Mode" value="पोस्टर प्रस्तुति" required onclick="toggleTravel(true)"> पोस्टर प्रस्तुति</label>
+            <label><input type="radio" name="Mode" value="मौखिक प्रस्तुति" required onclick="toggleTravel(false)"> मौखिक प्रस्तुति</label>
           </div>
         </fieldset>
       </div>
-
-      <div class="field">
-        <fieldset>
-          <legend>उपस्थिति का प्रकार <span class="req">*</span></legend>
-          <div class="radio-row">
-            <label><input type="radio" name="Mode" value="व्यक्तिगत उपस्थिति" required onclick="toggleTravel(true)"> व्यक्तिगत उपस्थिति</label>
-            <label><input type="radio" name="Mode" value="ऑनलाइन" required onclick="toggleTravel(false)"> ऑनलाइन</label>
-          </div>
-        </fieldset>
+      
+      <div class="subhead first">
+        <strong>(नोट 1)</strong> संस्थान के सक्षम प्राधिकारी द्वारा भौतिक रूप से भाग लेने हेतु अनुमति प्राप्त वैज्ञानिकों में से कम से कम 50% प्रतिभागियों द्वारा पोस्टर प्रस्तुति (Poster Presentation) देना अनिवार्य है।
+        <br><br>
+        <strong>(नोट 2)</strong> प्रस्तुति संबंधी तकनीकी दिशा-निर्देशों का पालन करना अनिवार्य है।
       </div>
-
+     
       <div class="subhead">शोध सारांश</div>
 
-      <div class="field">
-        <fieldset>
-          <legend>क्या आप शोध सारांश प्रस्तुत करेंगे?</legend>
-          <div class="radio-row">
-            <label><input type="radio" name="Abstract" value="हाँ" onclick="toggleAbstract(true)"> हाँ</label>
-            <label><input type="radio" name="Abstract" value="नहीं" onclick="toggleAbstract(false)" checked> नहीं</label>
-          </div>
-          <p class="hint">शोध सारांश (लगभग 250–300 शब्द, मंगल या यूनिकोड फॉण्ट में, फॉन्ट साइज़ 10, वर्ड फाइल के रूप में) <strong>30 अगस्त 2026</strong> तक <strong>hindicellcmerti@gmail.com</strong> पर ईमेल करें, अथवा नीचे दिए गए बॉक्स में सीधे टाइप/पेस्ट करें।</p>
-        </fieldset>
-      </div>
 
       <div class="field abstract-field is-hidden" id="abstractTitleField">
         <label for="abstractTitle">शोध सारांश का शीर्षक</label>
         <input type="text" id="abstractTitle" name="Abstract Title">
-      </div>
-
-      <div class="field abstract-field is-hidden" id="authorsField">
-        <label>लेखक / सह-लेखक के नाम</label>
-        <div id="authorList"></div>
-        <button type="button" class="add-btn" id="addAuthorBtn">+ लेखक जोड़ें</button>
-        <div class="author-preview" id="authorPreview">—</div>
-        <p class="hint">प्रस्तुतकर्ता का नाम सबसे पहले लिखें। नाम अल्पविराम से जुड़ेंगे तथा अंतिम नाम से पूर्व “, और” लगेगा।</p>
-        <input type="hidden" id="authorsJoined" name="Authors">
-      </div>
-
-      <div class="field abstract-field is-hidden" id="abstractTextField">
-        <label for="abstractText">शोध सारांश (यहाँ टाइप या पेस्ट करें)</label>
-        <textarea id="abstractText" name="Abstract Text" placeholder="अपना शोध सारांश यहाँ टाइप या पेस्ट करें (अधिकतम 300 शब्द)" rows="8"></textarea>
-        <p class="hint word-count" id="wordCountHint">0 / 300 शब्द</p>
-      </div>
-
-      <div class="field" id="themeField">
-        <label for="theme">विषय की रुचि</label>
-        <select id="theme" name="Theme of Interest">
-          <option value="">विषय चुनें (वैकल्पिक)</option>
-          <option value="विज्ञान एवं प्रौद्योगिकी के क्षेत्र में राजभाषा का योगदान">विज्ञान एवं प्रौद्योगिकी के क्षेत्र में राजभाषा का योगदान</option>
-          <option value="पोषक पौध उत्पादन एवं नर्सरी प्रबंधन">पोषक पौध उत्पादन एवं नर्सरी प्रबंधन</option>
-          <option value="रेशमकीट रोग एवं कीट प्रबंधन तथा उत्पादकता संवर्धन में आधुनिक तकनीकों का अनुप्रयोग">रेशमकीट रोग एवं कीट प्रबंधन तथा उत्पादकता संवर्धन में आधुनिक तकनीकों का अनुप्रयोग</option>
-          <option value="विशेष रूप से अभिकल्पित क्षमता निर्माण कार्यक्रम">विशेष रूप से अभिकल्पित क्षमता निर्माण कार्यक्रम</option>
-          <option value="पोस्ट-कोकून प्रसंस्करण, मूल्य संवर्धन तथा विपणन में कौशल विकास">पोस्ट-कोकून प्रसंस्करण, मूल्य संवर्धन तथा विपणन में कौशल विकास</option>
-        </select>
       </div>
 
       <div id="travelSection">
