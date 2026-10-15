@@ -501,78 +501,92 @@
         </div>
       </div>
       
-      <div class="subhead first">क्या प्रतिभागी ने सक्षम प्राधिकारी से अनुमति प्राप्त कर ली है?</div>
+      <div class="subhead first">क्या प्रतिभागी ने सक्षम प्राधिकारी से अनुमति प्राप्त कर ली है? <span class="req">*</span></div>
 
       <div class="field">
         <fieldset>
-          <legend> प्रस्तुतीकरण का प्रकार <span class="req">*</span></legend>
+          <legend>सक्षम प्राधिकारी से अनुमति</legend>
           <div class="radio-row">
-            <label><input type="radio" name="Mode" value="पोस्टर प्रस्तुति" required onclick="toggleTravel(true)"> पोस्टर प्रस्तुति</label>
-            <label><input type="radio" name="Mode" value="मौखिक प्रस्तुति" required onclick="toggleTravel(false)"> मौखिक प्रस्तुति</label>
+            <label><input type="radio" name="Permission" value="हाँ" required> हाँ</label>
+            <label><input type="radio" name="Permission" value="नहीं" required> नहीं</label>
           </div>
         </fieldset>
       </div>
-      
-      <div class="subhead first">
-        <strong>(नोट 1)</strong> संस्थान के सक्षम प्राधिकारी द्वारा भौतिक रूप से भाग लेने हेतु अनुमति प्राप्त वैज्ञानिकों में से कम से कम 50% प्रतिभागियों द्वारा पोस्टर प्रस्तुति (Poster Presentation) देना अनिवार्य है।
-        <br><br>
-        <strong>(नोट 2)</strong> प्रस्तुति संबंधी तकनीकी दिशा-निर्देशों का पालन करना अनिवार्य है।
-      </div>
-     
-      <div class="subhead">शोध सारांश</div>
 
-
-      <div class="field abstract-field is-hidden" id="abstractTitleField">
-        <label for="abstractTitle">शोध सारांश का शीर्षक</label>
-        <input type="text" id="abstractTitle" name="Abstract Title">
+      <div class="status-msg err" id="permissionNotice" role="status" aria-live="polite" style="display:none;">
+        कृपया भौतिक रूप से भाग लेने से पहले संस्थान के सक्षम प्राधिकारी से अनुमति प्राप्त करें।
       </div>
 
-      <div id="travelSection">
-        <div class="subhead travel-field">यात्रा कार्यक्रम</div>
-
-        <div class="field travel-field">
+      <div id="conditionalFields" class="is-hidden">
+        <div class="field">
           <fieldset>
-            <legend>यात्रा का माध्यम</legend>
+            <legend>प्रस्तुतीकरण का प्रकार <span class="req">*</span></legend>
             <div class="radio-row">
-              <label><input type="radio" name="Travel Mode" value="ट्रेन"> ट्रेन</label>
-              <label><input type="radio" name="Travel Mode" value="विमान"> विमान</label>
-              <label><input type="radio" name="Travel Mode" value="सड़क मार्ग"> सड़क मार्ग</label>
-              <label><input type="radio" name="Travel Mode" value="अन्य"> अन्य</label>
+              <label><input type="radio" name="Mode" value="पोस्टर प्रस्तुति"> पोस्टर प्रस्तुति</label>
+              <label><input type="radio" name="Mode" value="मौखिक प्रस्तुति"> मौखिक प्रस्तुति</label>
             </div>
           </fieldset>
         </div>
 
-        <div class="row2 travel-field">
-          <div class="field">
-            <label for="trainDetails">ट्रेन सं. व नाम</label>
-            <input type="text" id="trainDetails" name="Train Details">
+        <div class="subhead first">
+          <strong>नोट 1:</strong> संस्थान के सक्षम प्राधिकारी द्वारा भौतिक रूप से भाग लेने हेतु अनुमति प्राप्त वैज्ञानिकों में से कम से कम 50% प्रतिभागियों द्वारा पोस्टर प्रस्तुति (Poster Presentation) देना अनिवार्य है।
+          <br><br>
+          <strong>नोट 2:</strong> प्रस्तुति संबंधी तकनीकी दिशा-निर्देशों का पालन करना अनिवार्य है।
+        </div>
+
+        <div class="subhead">शोध सारांश</div>
+        <div class="field" id="abstractTitleField">
+          <label for="abstractTitle">शोध सारांश का शीर्षक <span class="req">*</span></label>
+          <input type="text" id="abstractTitle" name="Abstract Title">
+        </div>
+
+        <div id="travelSection">
+          <div class="subhead travel-field">यात्रा कार्यक्रम</div>
+
+          <div class="field travel-field">
+            <fieldset>
+              <legend>यात्रा का माध्यम</legend>
+              <div class="radio-row">
+                <label><input type="radio" name="Travel Mode" value="ट्रेन"> ट्रेन</label>
+                <label><input type="radio" name="Travel Mode" value="विमान"> विमान</label>
+                <label><input type="radio" name="Travel Mode" value="सड़क मार्ग"> सड़क मार्ग</label>
+                <label><input type="radio" name="Travel Mode" value="अन्य"> अन्य</label>
+              </div>
+            </fieldset>
           </div>
-          <div class="field">
-            <label for="flightDetails">विमान सं.</label>
-            <input type="text" id="flightDetails" name="Flight Details">
+
+          <div class="row2 travel-field">
+            <div class="field">
+              <label for="trainDetails">ट्रेन सं. व नाम</label>
+              <input type="text" id="trainDetails" name="Train Details">
+            </div>
+            <div class="field">
+              <label for="flightDetails">विमान सं.</label>
+              <input type="text" id="flightDetails" name="Flight Details">
+            </div>
+          </div>
+
+          <div class="field travel-field">
+            <label for="comingFrom">स्थान जहाँ से आ रहे हैं</label>
+            <input type="text" id="comingFrom" name="Coming From">
+          </div>
+
+          <div class="row2 travel-field">
+            <div class="field">
+              <label for="arrival">आगमन की तिथि एवं समय</label>
+              <input type="text" id="arrival" name="Arrival DateTime" placeholder="दि./मा./वर्ष, समय">
+            </div>
+            <div class="field">
+              <label for="departure">प्रस्थान की तिथि एवं समय</label>
+              <input type="text" id="departure" name="Departure DateTime" placeholder="दि./मा./वर्ष, समय">
+            </div>
           </div>
         </div>
 
-        <div class="field travel-field">
-          <label for="comingFrom">स्थान जहाँ से आ रहे हैं</label>
-          <input type="text" id="comingFrom" name="Coming From">
+        <div class="field">
+          <label for="remarks">टिप्पणी / अन्य आवश्यकताएँ</label>
+          <textarea id="remarks" name="Remarks"></textarea>
         </div>
-
-        <div class="row2 travel-field">
-          <div class="field">
-            <label for="arrival">आगमन की तिथि एवं समय</label>
-            <input type="text" id="arrival" name="Arrival DateTime" placeholder="दि./मा./वर्ष, समय">
-          </div>
-          <div class="field">
-            <label for="departure">प्रस्थान की तिथि एवं समय</label>
-            <input type="text" id="departure" name="Departure DateTime" placeholder="दि./मा./वर्ष, समय">
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="remarks">टिप्पणी / अन्य आवश्यकताएँ</label>
-        <textarea id="remarks" name="Remarks"></textarea>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">पंजीकरण जमा करें</button>
@@ -591,263 +605,61 @@
 <script>
   const SUBMIT_URL = "https://script.google.com/macros/s/AKfycby0nGTE-0myV-mwnPRDgrVKjigN_9ZKwbOzR5doZw055zil3FFijReOxm9U_gqHMUXgUg/exec";
 
-  const abstractText  = document.getElementById('abstractText');
-  const abstractTitle = document.getElementById('abstractTitle');
-  const wordCountHint = document.getElementById('wordCountHint');
-  const MAX_ABSTRACT_WORDS = 300;
-
-  /* ---------- auto Hindi transliteration (phonetic Hinglish -> Devanagari) ---------- */
-  /* As soon as a word is finished (space / punctuation / leaving the field), it is
-     converted from Roman-typed Hindi (e.g. "namaste") into Devanagari (नमस्ते).
-     ALL-CAPS words (e.g. CMERTI, JRF) are left untouched, since those are usually
-     institutional acronyms, not words meant to be typed phonetically. */
-
-  const HI_VOWEL_INDEP = { aa:'आ', ai:'ऐ', au:'औ', ee:'ई', ii:'ई', oo:'ऊ', uu:'ऊ', a:'अ', e:'ए', i:'इ', o:'ओ', u:'उ' };
-  const HI_VOWEL_MATRA = { aa:'ा', ai:'ै', au:'ौ', ee:'ी', ii:'ी', oo:'ू', uu:'ू', a:'', e:'े', i:'ि', o:'ो', u:'ु' };
-  const HI_CONS = {
-    ksh:'क्ष', chh:'छ', gy:'ज्ञ', tr:'त्र',
-    kh:'ख', gh:'घ', ch:'च', jh:'झ', th:'थ', dh:'ध', ph:'फ', bh:'भ', sh:'श',
-    b:'ब', c:'क', d:'द', f:'फ़', g:'ग', h:'ह', j:'ज', k:'क', l:'ल', m:'म',
-    n:'न', p:'प', q:'क', r:'र', s:'स', t:'त', v:'व', w:'व', x:'क्स', y:'य', z:'ज़'
-  };
-  const HI_ALL_KEYS = Object.keys(HI_CONS).concat(Object.keys(HI_VOWEL_INDEP)).sort(function(a,b){ return b.length - a.length; });
-
-  function transliterateHindiWord(word){
-    if (/^[A-Z]{2,}$/.test(word)) return word; // leave acronyms like CMERTI, JRF alone
-    var w = word.toLowerCase();
-    var tokens = [];
-    var i = 0;
-    while (i < w.length){
-      var matched = null;
-      for (var k = 0; k < HI_ALL_KEYS.length; k++){
-        var key = HI_ALL_KEYS[k];
-        if (w.substr(i, key.length) === key){ matched = key; break; }
-      }
-      if (!matched) matched = w[i];
-      tokens.push(matched);
-      i += matched.length;
-    }
-    var isVowel = function(t){ return HI_VOWEL_INDEP.hasOwnProperty(t); };
-    var out = '';
-    var idx = 0;
-    while (idx < tokens.length){
-      var tok = tokens[idx];
-      if (isVowel(tok)){
-        out += HI_VOWEL_INDEP[tok] || tok;
-        idx += 1;
-      } else if (HI_CONS.hasOwnProperty(tok)){
-        var base = HI_CONS[tok];
-        var next = tokens[idx + 1];
-        if (next && isVowel(next)){
-          out += (next === 'a') ? base : (base + HI_VOWEL_MATRA[next]);
-          idx += 2;
-        } else {
-          out += base;
-          if (next && !isVowel(next)) out += '्';
-          idx += 1;
-        }
-      } else {
-        out += tok; // digits/punctuation pass through untouched
-        idx += 1;
-      }
-    }
-    return out;
-  }
-
-  const TRANSLIT_BOUNDARY = /[\s,.;:!?()"'\-]/;
-
-  function attachTransliteration(el){
-    if (!el) return;
-    el.addEventListener('input', function(){
-      var pos = el.selectionStart;
-      if (pos === null || pos === undefined) return;
-      var value = el.value;
-      var before = value.slice(0, pos);
-      var afterCursor = value.slice(pos);
-      var lastChar = before.slice(-1);
-      if (!TRANSLIT_BOUNDARY.test(lastChar)) return; // word not finished yet
-      var stem = before.slice(0, -1);
-      var m = stem.match(/[A-Za-z]+$/);
-      if (!m) return;
-      var word = m[0];
-      var converted = transliterateHindiWord(word);
-      if (converted === word) return;
-      var newBefore = stem.slice(0, stem.length - word.length) + converted + lastChar;
-      el.value = newBefore + afterCursor;
-      var newPos = newBefore.length;
-      el.setSelectionRange(newPos, newPos);
-    });
-    el.addEventListener('blur', function(){
-      var value = el.value;
-      var m = value.match(/[A-Za-z]+$/);
-      if (!m) return;
-      var word = m[0];
-      var converted = transliterateHindiWord(word);
-      if (converted === word) return;
-      el.value = value.slice(0, value.length - word.length) + converted;
-    });
-  }
-
-  ['fullName','designation','org','address','abstractTitle','abstractText','trainDetails','flightDetails','comingFrom','remarks']
-    .forEach(function(id){ attachTransliteration(document.getElementById(id)); });
-
-  /* ---------- author list (repeatable rows) ---------- */
-
-  const authorList    = document.getElementById('authorList');
-  const authorsJoined = document.getElementById('authorsJoined');
-  const authorPreview = document.getElementById('authorPreview');
-  const addAuthorBtn  = document.getElementById('addAuthorBtn');
-
-  function joinAuthors(names){
-    if (names.length === 0) return '';
-    if (names.length === 1) return names[0];
-    if (names.length === 2) return names[0] + ' और ' + names[1];
-    return names.slice(0, -1).join(', ') + ', और ' + names[names.length - 1];
-  }
-
-  function syncAuthors(){
-    const names = Array.prototype.map.call(
-      authorList.querySelectorAll('input'),
-      function(i){ return i.value.replace(/\s+/g, ' ').trim(); }
-    ).filter(Boolean);
-
-    authorsJoined.value = joinAuthors(names);
-    authorPreview.textContent = authorsJoined.value || '—';
-
-    Array.prototype.forEach.call(authorList.querySelectorAll('.idx'), function(el, n){
-      el.textContent = (n + 1) + '.';
-    });
-  }
-
-  function addAuthorRow(value, focus){
-    const row = document.createElement('div');
-    row.className = 'author-row';
-
-    const idx = document.createElement('span');
-    idx.className = 'idx';
-
-    const inp = document.createElement('input');
-    inp.type = 'text';
-    inp.placeholder = 'लेखक का पूरा नाम';
-    inp.autocomplete = 'off';
-    if (value) inp.value = value;
-    attachTransliteration(inp);
-    inp.addEventListener('input', syncAuthors);
-    inp.addEventListener('keydown', function(ev){
-      if (ev.key === 'Enter'){ ev.preventDefault(); addAuthorRow('', true); }
-    });
-
-    const del = document.createElement('button');
-    del.type = 'button';
-    del.className = 'row-del';
-    del.textContent = '\u00D7';
-    del.title = 'हटाएँ';
-    del.addEventListener('click', function(){
-      row.remove();
-      if (!authorList.children.length) addAuthorRow();
-      syncAuthors();
-    });
-
-    row.appendChild(idx);
-    row.appendChild(inp);
-    row.appendChild(del);
-    authorList.appendChild(row);
-    syncAuthors();
-    if (focus) inp.focus();
-  }
-
-  function resetAuthors(){
-    authorList.innerHTML = '';
-    addAuthorRow();
-  }
-
-  addAuthorBtn.addEventListener('click', function(){ addAuthorRow('', true); });
-  resetAuthors();
-
-  /* ---------- show / hide (class based, keeps grid layout intact) ---------- */
-
-  function toggleAbstract(show){
-    document.querySelectorAll('.abstract-field').forEach(function(el){
-      el.classList.toggle('is-hidden', !show);
-    });
-    if (!show){
-      abstractTitle.value = '';
-      abstractText.value  = '';
-      resetAuthors();
-      enforceAbstractLimit();
-    }
-  }
-
-  function toggleTravel(show){
-    document.querySelectorAll('.travel-field').forEach(function(el){
-      el.classList.toggle('is-hidden', !show);
-    });
-  }
-
-  /* ---------- abstract textarea ---------- */
-
-  function normalizeAbstractText(str){
-    return str
-      .normalize('NFC')
-      .replace(/\r\n/g, '\n')
-      .replace(/[ \t]+/g, ' ')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-  }
-
-  function enforceAbstractLimit(){
-    let words = abstractText.value.trim().length ? abstractText.value.trim().split(/\s+/) : [];
-    if (words.length > MAX_ABSTRACT_WORDS) {
-      words = words.slice(0, MAX_ABSTRACT_WORDS);
-      abstractText.value = words.join(' ');
-    }
-    wordCountHint.textContent = words.length + ' / ' + MAX_ABSTRACT_WORDS + ' शब्द';
-    wordCountHint.classList.toggle('limit', words.length >= MAX_ABSTRACT_WORDS);
-  }
-
-  if (abstractText) {
-    abstractText.addEventListener('paste', function(e){
-      e.preventDefault();
-      const clip  = (e.clipboardData || window.clipboardData).getData('text/plain');
-      const clean = normalizeAbstractText(clip);
-      const start = this.selectionStart, end = this.selectionEnd;
-      const current = this.value;
-      this.value = current.slice(0, start) + clean + current.slice(end);
-      enforceAbstractLimit();
-    });
-    abstractText.addEventListener('input', enforceAbstractLimit);
-    abstractText.addEventListener('blur', function(){
-      abstractText.value = normalizeAbstractText(abstractText.value);
-      enforceAbstractLimit();
-    });
-  }
-
-  /* ---------- submission ---------- */
-
-  const form        = document.getElementById('regForm');
-  const btn         = document.getElementById('submitBtn');
-  const statusMsg   = document.getElementById('statusMsg');
+  const form = document.getElementById('regForm');
+  const btn = document.getElementById('submitBtn');
+  const statusMsg = document.getElementById('statusMsg');
   const hiddenFrame = document.getElementById('hidden_iframe');
+  const conditionalFields = document.getElementById('conditionalFields');
+  const permissionNotice = document.getElementById('permissionNotice');
+  const permissionRadios = document.querySelectorAll('input[name="Permission"]');
+  const modeRadios = document.querySelectorAll('input[name="Mode"]');
+  const abstractTitle = document.getElementById('abstractTitle');
   let awaitingResponse = false;
 
-  // Stop Enter-key in any single-line field from submitting the form early
-  // (e.g. pressing Enter after "Abstract Title" would otherwise send the
-  // form before "Abstract Text" / other later fields are filled in).
-  form.addEventListener('keydown', function(e){
+  function setConditionalFields(show) {
+    conditionalFields.classList.toggle('is-hidden', !show);
+    conditionalFields.querySelectorAll('input, select, textarea').forEach(function (el) {
+      el.disabled = !show;
+    });
+    modeRadios.forEach(function (el) { el.required = show; });
+    abstractTitle.required = show;
+    permissionNotice.style.display = 'none';
+  }
+
+  permissionRadios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      const permission = document.querySelector('input[name="Permission"]:checked');
+      const approved = permission && permission.value === 'हाँ';
+      setConditionalFields(!!approved);
+      if (permission && permission.value === 'नहीं') {
+        permissionNotice.style.display = 'block';
+      }
+    });
+  });
+  setConditionalFields(false);
+
+  // Keep Enter from prematurely submitting a single-line field.
+  form.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
       e.preventDefault();
     }
   });
 
   const REGISTRATION_CUTOFF = new Date('2026-11-03T23:59:59+05:30');
-  if (new Date() > REGISTRATION_CUTOFF) {
-    btn.disabled = true;
-    btn.textContent = 'पंजीकरण बंद हो चुका है';
+  function registrationClosed() { return new Date() > REGISTRATION_CUTOFF; }
+  function showError(message) {
     statusMsg.className = 'status-msg err';
-    statusMsg.textContent = 'पंजीकरण 03 नवम्बर 2026 को बंद हो चुका है। अधिक जानकारी हेतु cmerti@rediffmail.com या +91-9435357211 पर संपर्क करें।';
+    statusMsg.textContent = message;
+    statusMsg.style.display = 'block';
   }
 
-  if (SUBMIT_URL.indexOf('PASTE_YOUR') !== 0) {
+  if (registrationClosed()) {
+    btn.disabled = true;
+    btn.textContent = 'पंजीकरण बंद हो चुका है';
+    showError('पंजीकरण 03 नवम्बर 2026 को बंद हो चुका है। अधिक जानकारी हेतु cmerti@rediffmail.com या +91-9435357211 पर संपर्क करें।');
+  }
+
+  if (SUBMIT_URL && !SUBMIT_URL.startsWith('PASTE_YOUR')) {
     form.action = SUBMIT_URL;
     form.target = 'hidden_iframe';
     form.method = 'POST';
@@ -855,43 +667,41 @@
     form.acceptCharset = 'UTF-8';
   }
 
-  form.addEventListener('submit', function(e){
+  form.addEventListener('submit', function (e) {
     statusMsg.className = 'status-msg';
     statusMsg.textContent = '';
+    statusMsg.style.display = 'none';
 
-    if (new Date() > REGISTRATION_CUTOFF) {
+    if (registrationClosed()) {
       e.preventDefault();
-      statusMsg.className = 'status-msg err';
-      statusMsg.textContent = 'पंजीकरण 03 नवम्बर 2026 को बंद हो चुका है। अधिक जानकारी हेतु cmerti@rediffmail.com या +91-9435357211 पर संपर्क करें।';
+      showError('पंजीकरण 03 नवम्बर 2026 को बंद हो चुका है। अधिक जानकारी हेतु cmerti@rediffmail.com या +91-9435357211 पर संपर्क करें।');
       return;
     }
 
-    if (SUBMIT_URL.indexOf('PASTE_YOUR') === 0) {
+    if (!SUBMIT_URL || SUBMIT_URL.startsWith('PASTE_YOUR')) {
       e.preventDefault();
-      statusMsg.className = 'status-msg err';
-      statusMsg.textContent = 'फॉर्म अभी Google Sheet से जुड़ा नहीं है। कृपया SETUP_INSTRUCTIONS पढ़ें।';
+      showError('फॉर्म अभी Google Sheet से जुड़ा नहीं है। कृपया Google Apps Script URL जाँचें।');
       return;
     }
 
-    // normalize before the browser serialises the form
-    abstractText.value = normalizeAbstractText(abstractText.value);
-    syncAuthors();
+    const permission = document.querySelector('input[name="Permission"]:checked');
+    if (!permission) {
+      e.preventDefault();
+      showError('कृपया सक्षम प्राधिकारी से अनुमति संबंधी विकल्प चुनें।');
+      return;
+    }
 
-    const wantsAbstract = document.querySelector('input[name="Abstract"]:checked');
-    if (wantsAbstract && wantsAbstract.value === 'हाँ') {
-      if (!abstractTitle.value.trim() && !abstractText.value.trim()) {
+    if (permission.value === 'हाँ') {
+      const mode = document.querySelector('input[name="Mode"]:checked');
+      if (!mode) {
         e.preventDefault();
-        statusMsg.className = 'status-msg err';
-        statusMsg.textContent = 'कृपया शोध सारांश का शीर्षक अथवा सारांश टाइप करें, अन्यथा "नहीं" चुनें।';
-        abstractText.focus();
+        showError('कृपया पोस्टर प्रस्तुति या मौखिक प्रस्तुति में से एक विकल्प चुनें।');
         return;
       }
-      if (!authorsJoined.value.trim()) {
+      if (!abstractTitle.value.trim()) {
         e.preventDefault();
-        statusMsg.className = 'status-msg err';
-        statusMsg.textContent = 'कृपया कम से कम एक लेखक का नाम दर्ज करें।';
-        const firstAuthor = authorList.querySelector('input');
-        if (firstAuthor) firstAuthor.focus();
+        showError('कृपया शोध सारांश का शीर्षक दर्ज करें।');
+        abstractTitle.focus();
         return;
       }
     }
@@ -901,30 +711,29 @@
     btn.textContent = 'जमा किया जा रहा है...';
   });
 
-  hiddenFrame.addEventListener('load', function(){
+  hiddenFrame.addEventListener('load', function () {
     if (!awaitingResponse) return;
     awaitingResponse = false;
     statusMsg.className = 'status-msg ok';
     statusMsg.textContent = 'धन्यवाद — आपका पंजीकरण दर्ज कर लिया गया है। शीघ्र ही ईमेल द्वारा पुष्टि भेजी जाएगी।';
+    statusMsg.style.display = 'block';
     form.reset();
-    toggleAbstract(false);
-    toggleTravel(true);
+    setConditionalFields(false);
     btn.disabled = false;
     btn.textContent = 'पंजीकरण जमा करें';
   });
 
-  /* ---------- tilt ---------- */
-
+  // Subtle card tilt on pointer devices; disabled for reduced-motion users.
   const tiltWrap = document.querySelector('.tilt-wrap');
   const card = document.querySelector('.card');
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches === false && window.matchMedia('(hover: hover)').matches) {
-    tiltWrap.addEventListener('mousemove', (e) => {
+    tiltWrap.addEventListener('mousemove', function (e) {
       const rect = tiltWrap.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `rotateY(${x * 4}deg) rotateX(${ -y * 4}deg)`;
+      card.style.transform = 'rotateY(' + (x * 4) + 'deg) rotateX(' + (-y * 4) + 'deg)';
     });
-    tiltWrap.addEventListener('mouseleave', () => {
+    tiltWrap.addEventListener('mouseleave', function () {
       card.style.transform = 'rotateY(0deg) rotateX(0deg)';
     });
   }
